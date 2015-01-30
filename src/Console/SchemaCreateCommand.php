@@ -1,11 +1,8 @@
 <?php namespace Mitch\LaravelDoctrine\Console;
 
-use Illuminate\Console\Command;
-use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Symfony\Component\Console\Input\InputOption;
 
-class SchemaCreateCommand extends Command
+class SchemaCreateCommand extends SchemaCommand
 {
     /**
      * The console command name.
@@ -22,28 +19,6 @@ class SchemaCreateCommand extends Command
     protected $description = 'Create database schema from models';
 
     /**
-     * The schema tool.
-     *
-     * @var \Doctrine\ORM\Tools\SchemaTool
-     */
-    private $tool;
-
-    /**
-     * The class metadata factory
-     *
-     * @var \Doctrine\ORM\Tools\SchemaTool
-     */
-    private $metadata;
-
-    public function __construct(SchemaTool $tool, ClassMetadataFactory $metadata)
-    {
-        parent::__construct();
-
-        $this->tool = $tool;
-        $this->metadata = $metadata;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -51,12 +26,12 @@ class SchemaCreateCommand extends Command
     public function fire()
     {
         if ($this->option('sql')) {
-            $this->info('Outputting create query:'.PHP_EOL);
-            $sql = $this->tool->getCreateSchemaSql($this->metadata->getAllMetadata());
-            $this->info(implode(';'.PHP_EOL, $sql));
+            $this->info('Outputting create query:');
+            $sql = $this->getTool()->getCreateSchemaSql($this->metadata->getAllMetadata());
+            $this->info(implode(';' . PHP_EOL, $sql));
         } else {
             $this->info('Creating database schema...');
-            $this->tool->createSchema($this->metadata->getAllMetadata());
+            $this->getTool()->createSchema($this->metadata->getAllMetadata());
             $this->info('Schema has been created!');
         }
     }
@@ -64,7 +39,7 @@ class SchemaCreateCommand extends Command
     protected function getOptions()
     {
         return [
-            ['sql', false, InputOption::VALUE_NONE, 'Dumps SQL query and does not execute creation.']
+            ['sql', null, InputOption::VALUE_OPTIONAL, 'Dumps SQL query and does not execute creation.']
         ];
     }
 } 
