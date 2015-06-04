@@ -16,7 +16,6 @@ class DoctrineReminderRepository implements ReminderRepositoryInterface {
      * @param string                 $hashKey
      * @param int                    $expires
      */
-
     public function __construct(EntityManagerInterface $entities, $hashKey, $expires = 60)
     {
         $this->entities = $entities;

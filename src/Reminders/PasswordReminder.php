@@ -38,7 +38,6 @@ class PasswordReminder {
      * @param string $email
      * @param string $token
      */
-
     public function __construct($email, $token) {
         $this->email = $email;
         $this->token = $token;
@@ -50,7 +49,6 @@ class PasswordReminder {
      *
      * @return DateTime
      */
-
     public function getCreatedAt() {
         return $this->createdAt;
     }
